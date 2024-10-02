@@ -1,0 +1,60 @@
+program 1 : #include<PRIZM.h>
+PRIZM p;
+
+void setup()
+{
+  p.PrizmBegin();
+  p.setMotorInvert(1, 1) ;
+  enc(100, 9818, 100, 9818);
+  p.setMotorPowers(125, 125);
+  delay(1000);
+  p.resetEncoders();
+  p.setMotorTarget(1, 360, 960);
+  delay(667);
+  p.setMotorPowers(125, 125);
+  delay(1000);
+  enc(23, 6546, 23, 6545);
+  p.setMotorPowers(125, 125);
+  delay(1000);
+
+  renc(100, -6546, 100, -6545);
+  p.setMotorPowers(125, 125);
+  delay(1000);
+  p.resetEncoders();
+  p.setMotorTarget(1, 360, -960);
+  delay(667);
+  p.setMotorPowers(125, 125);
+  delay(1000);
+  renc(100, -9818, 100, -9818);
+  p.setMotorPowers(125, 125);
+  delay(1000);
+  p.PrizmEnd();
+}
+
+void loop()
+{
+}
+void enc(int a, int  b, int c, int d)
+{
+  p.resetEncoders();
+  while (p.readEncoderCount(1) <= b && p.readEncoderCount(2) <= d )
+  {
+    while (p.readSonicSensorCM(4) >= 15 && p.readEncoderCount(1) <= b && p.readEncoderCount(2) <= d)
+    {
+      p.setMotorPowers(a, c);
+    }
+    p.setMotorPowers(125, 125);
+  }
+}
+void renc(int a, int  b, int c, int d)
+{
+  p.resetEncoders();
+  while (p.readEncoderCount(1) >= b && p.readEncoderCount(2) >= d )
+  {
+    while (p.readSonicSensorCM(4) >= 15 && p.readEncoderCount(1) >= b && p.readEncoderCount(2) >= d)
+    {
+      p.setMotorPowers(-a, -c);
+    }
+    p.setMotorPowers(125, 125);
+  }
+}
