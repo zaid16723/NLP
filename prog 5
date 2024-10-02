@@ -1,0 +1,92 @@
+Waiterbot  : #include<PRIZM.h>
+PRIZM p;
+int tn = 3;
+int count = 0;
+void setup()
+{
+  p.PrizmBegin();
+  p.setServoPosition(1, 0);
+  p.setMotorInvert(1, 1);
+  if (tn <= 3)
+  {
+    left();
+  }
+  else if (tn > 3)
+  {
+    right();
+  }
+  p.setMotorPowers(100, 100);
+}
+
+void loop()
+{
+  ms(tn);
+  while (p.readSonicSensorCM(4) <= 15)
+  {
+    p.setMotorPowers(125, 125);
+    delay(250);
+    p.setMotorPowers(100, 100);
+  }
+
+  if (p.readLineSensor(5) == 1)
+  {
+    count++;
+    delay(200);
+  }
+}
+
+void ms(int tabno)
+{
+  if (tabno > 3)
+  {
+    tabno -= 3;
+  }
+  if (count == tabno)
+  {
+    p.setMotorPowers(125, 125);
+    p.setServoPosition(1, 35);
+    reverse(tabno);
+  }
+}
+
+void left()
+{
+  p.setMotorTargets(720, -1440, 720, 1440);
+  delay(1500);
+  p.resetEncoders();
+  p.setMotorTargets(720, 15710, 720, 15710);
+  delay(12000);
+  p.resetEncoders();
+  p.setMotorTargets(720, 1440, 720, -1440);
+  delay(1500);
+  p.resetEncoders();
+}
+
+void right()
+{
+  p.setMotorTargets(720, 1440, 720, -1440);
+  delay(1500);
+  p.resetEncoders();
+  p.setMotorTargets(720, 15710, 720, 15710);
+  delay(12000);
+  p.resetEncoders();
+  p.setMotorTargets(720, -1440, 720, 1440);
+  delay(1500);
+  p.resetEncoders();
+}
+
+
+void reverse(int r)
+{
+  p.setMotorTargets(720, 0, 720, 0);
+  delay(25000);
+  if (tn <= 3)
+  {
+    right();
+  }
+  else if (tn > 3)
+  {
+    left();
+  }
+  p.PrizmEnd();
+}
