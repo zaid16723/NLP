@@ -1,0 +1,50 @@
+#include <PRIZM.h>
+PRIZM p;
+int count = 0;
+int flag = 0;
+void setup()
+{
+  p.PrizmBegin();
+  p.setMotorInvert(1, 1);
+}
+
+void loop()
+{
+  p.setMotorPowers(50, 50);
+  if (p.readSonicSensorCM(4) <= 50)
+  {
+    count = true;
+    flag++;
+    delay(100);
+  }
+  else
+  {
+    count = false;
+  }
+  if (count == true && flag == 1)
+  {
+    p.resetEncoders();
+    p.setMotorTargets(360, 1440, 360, -1440);
+    delay(1250);
+  }
+  else if (count == true && flag == 2)
+  {
+    p.resetEncoders();
+    p.setMotorTargets(360, -2880, 360, 2880);
+    delay(2500);
+  }
+  else if (count == true && flag == 3)
+  {
+    p.resetEncoders();
+    p.setMotorTargets(360, -1440, 360, 1440);
+    delay(1250);
+    flag = 0;
+  }
+
+  if (p.readLineSensor(5) == 1)
+  {
+    p.resetEncoders();
+    p.setMotorTargets(360, -1440, 360, 1440);
+    delay(1250);
+  }
+}
