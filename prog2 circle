@@ -1,0 +1,27 @@
+#include <PRIZM.h>
+PRIZM p;
+void setup()
+{
+    p.PrizmBegin();
+    p.setMotorInvert(1,1);
+    p.resetEncoders();
+    while (p.readEncoderCount(1)<29286 && p.readEncoderCount(1)<19102)
+    {
+        while (p.readEncounterCount(1)<29286 && p.readEncoderCount(1)<19102 && p.readSonicSensor(4)>15)
+        {
+            p.setMotorPowers(50,33);
+        }
+        p.setMotorPower(125,125);
+    }
+    p.resetEncoders();
+    
+    p.setMotorTargets(360,1440,360,-1440);
+    delay(1250);
+    p.setMotorPowers(125,125);
+    delay(1000);
+    p.resetEncoders();
+    
+    p.setMotorTargets(720,-1273,720,-1273);
+    delay(2000);
+    p.PeizmEnd();
+}
