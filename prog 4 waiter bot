@@ -1,0 +1,31 @@
+#include<PRIZM.h>
+PRIZM p;
+void setup()
+{
+  p.PrizmBegin();
+  p.setMotorInvert(1, 1);
+}
+void loop()
+{
+  while (p.readSonicSensorCM(4) < 50)//continue loop
+  {
+    if (p.readSonicSensorCM(4) > 15)//go forward
+    {
+      p.setMotorPowers(100, 100);
+    }
+    else if (p.readSonicSensorCM(4) < 15)//gp reverse
+    {
+      p.setMotorPowers(-50, -50);
+    }
+
+    else if (p.readSonicSensorCM(4) == 15)//stop
+    {
+      p.setMotorPowers(125, 125);
+    }
+    else if (p.readLineSensor(5) == 1)//black line detected, stop program
+    {
+      p.PrizmEnd();
+    }
+  }
+  p.setMotorPowers(-50, 50);//for rotating if distance gereater than 50
+}
